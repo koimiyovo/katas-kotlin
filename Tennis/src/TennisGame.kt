@@ -13,58 +13,58 @@ class TennisGame(firstPlayerName: String, secondPlayerName: String)
 
     fun getScore(): String
     {
-        var score = ""
-        var tempScore = 0
-        if (firstPlayer.score == secondPlayer.score)
+        return when
         {
-            when (firstPlayer.score)
-            {
-                0    -> score = "Love-All"
-                1    -> score = "Fifteen-All"
-                2    -> score = "Thirty-All"
-                else -> score = "Deuce"
-            }
+            draw()           -> drawResult()
+            advantageOrWin() -> advantageOrWinResult()
+            else             -> onGoingResult()
         }
-        else if (firstPlayer.score >= 4 || secondPlayer.score >= 4)
+    }
+
+    private fun draw() = firstPlayer.score == secondPlayer.score
+
+    private fun drawResult(): String
+    {
+        return when (firstPlayer.score)
         {
-            val minusResult = firstPlayer.score - secondPlayer.score
-            if (minusResult == 1)
-            {
-                score = "Advantage ${firstPlayer.name}"
-            }
-            else if (minusResult == -1)
-            {
-                score = "Advantage ${secondPlayer.name}"
-            }
-            else if (minusResult >= 2)
-            {
-                score = "Win for ${firstPlayer.name}"
-            }
-            else
-            {
-                score = "Win for ${secondPlayer.name}"
-            }
+            0    -> "Love-All"
+            1    -> "Fifteen-All"
+            2    -> "Thirty-All"
+            else -> "Deuce"
+        }
+    }
+
+    private fun advantageOrWin() = firstPlayer.score >= 4 || secondPlayer.score >= 4
+
+    private fun advantageOrWinResult(): String
+    {
+        val scoreDifference = firstPlayer.score - secondPlayer.score
+        if (scoreDifference == 1)
+        {
+            return "Advantage ${firstPlayer.name}"
+        }
+        else if (scoreDifference == -1)
+        {
+            return "Advantage ${secondPlayer.name}"
+        }
+        else if (scoreDifference >= 2)
+        {
+            return "Win for ${firstPlayer.name}"
         }
         else
         {
-            for (i in 1..2)
-            {
-                if (i == 1)
-                    tempScore = firstPlayer.score
-                else
-                {
-                    score += "-"
-                    tempScore = secondPlayer.score
-                }
-                when (tempScore)
-                {
-                    0 -> score += "Love"
-                    1 -> score += "Fifteen"
-                    2 -> score += "Thirty"
-                    3 -> score += "Forty"
-                }
-            }
+            return "Win for ${secondPlayer.name}"
         }
-        return score
+    }
+
+    private fun onGoingResult() = "${translateScore(firstPlayer.score)}-${translateScore(secondPlayer.score)}"
+
+    private fun translateScore(score: Int) = when (score)
+    {
+        0    -> "Love"
+        1    -> "Fifteen"
+        2    -> "Thirty"
+        3    -> "Forty"
+        else -> ""
     }
 }
