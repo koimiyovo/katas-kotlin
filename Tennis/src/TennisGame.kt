@@ -15,9 +15,10 @@ class TennisGame(firstPlayerName: String, secondPlayerName: String)
     {
         return when
         {
-            draw()           -> drawResult()
-            advantageOrWin() -> advantageOrWinResult()
-            else             -> onGoingResult()
+            draw()      -> drawResult()
+            advantage() -> advantageResult()
+            win()       -> winResult()
+            else        -> onGoingResult()
         }
     }
 
@@ -34,20 +35,35 @@ class TennisGame(firstPlayerName: String, secondPlayerName: String)
         }
     }
 
-    private fun advantageOrWin() = firstPlayer.score >= 4 || secondPlayer.score >= 4
+    private fun advantage(): Boolean
+    {
+        val scoreDifference = firstPlayer.score - secondPlayer.score
+        return (firstPlayer.score >= 4 || secondPlayer.score >= 4) && (scoreDifference == 1 || scoreDifference == -1)
+    }
 
-    private fun advantageOrWinResult(): String
+    private fun advantageResult(): String
     {
         val scoreDifference = firstPlayer.score - secondPlayer.score
         if (scoreDifference == 1)
         {
             return "Advantage ${firstPlayer.name}"
         }
-        else if (scoreDifference == -1)
+        else
         {
             return "Advantage ${secondPlayer.name}"
         }
-        else if (scoreDifference >= 2)
+    }
+
+    private fun win(): Boolean
+    {
+        val scoreDifference = firstPlayer.score - secondPlayer.score
+        return (firstPlayer.score >= 4 || secondPlayer.score >= 4) && (scoreDifference >= 2 || scoreDifference <= -2)
+    }
+
+    private fun winResult(): String
+    {
+        val scoreDifference = firstPlayer.score - secondPlayer.score
+        if (scoreDifference >= 2)
         {
             return "Win for ${firstPlayer.name}"
         }
