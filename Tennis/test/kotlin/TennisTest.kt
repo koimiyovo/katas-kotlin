@@ -5,25 +5,8 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class TennisTest
 {
-    @ParameterizedTest
-    @MethodSource("allScores")
-    fun checkAllScoresTennisGame(player1Score: Int, player2Score: Int, expectedScore: String) {
-        val game = TennisGame("player1", "player2")
-        checkAllScores(game, player1Score, player2Score, expectedScore)
-    }
-
-    fun checkAllScores(game: TennisGame, player1Score: Int, player2Score: Int, expectedScore: String) {
-        val highestScore = Math.max(player1Score, player2Score)
-        for (i in 0 until highestScore) {
-            if (i < player1Score)
-                game.wonPoint("player1")
-            if (i < player2Score)
-                game.wonPoint("player2")
-        }
-        assertEquals(expectedScore, game.getScore())
-    }
-
-    companion object {
+    companion object
+    {
         @JvmStatic
         fun allScores(): List<Arguments> =
             listOf(
@@ -61,5 +44,28 @@ class TennisTest
                     Arguments.of(16, 14, "Win for player1"),
                     Arguments.of(14, 16, "Win for player2")
             )
+    }
+
+    @ParameterizedTest
+    @MethodSource("allScores")
+    fun checkAllScoresTennisGame(player1Score: Int, player2Score: Int, expectedScore: String)
+    {
+        val game = TennisGame("player1", "player2")
+
+        whenPlayGame(game, player1Score, player2Score)
+
+        assertEquals(expectedScore, game.getScore())
+    }
+
+    private fun whenPlayGame(game: TennisGame, player1Score: Int, player2Score: Int)
+    {
+        val highestScore = Math.max(player1Score, player2Score)
+        for (i in 0 until highestScore)
+        {
+            if (i < player1Score)
+                game.wonPoint("player1")
+            if (i < player2Score)
+                game.wonPoint("player2")
+        }
     }
 }
