@@ -4,8 +4,9 @@ import kotlin.test.assertEquals
 class CityFinderTest
 {
     @Test
-    internal fun test()
+    internal fun `empty referential`()
     {
-        assertEquals(1, 1)
+        val cityFinder = CityFinder(emptyList())
+        assertEquals(emptyList(), cityFinder.find("Paris"))
     }
 }
